@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorry Button Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 3em;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .question {
+            font-size: 1.8em;
+            color: #fff;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .buttons-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .btn {
+            font-family: 'Comic Neue', cursive;
+            font-size: 1.5em;
+            font-weight: 700;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-yes {
+            background: #4ecdc4;
+            color: #fff;
+        }
+        
+        .btn-yes:hover {
+            background: #45b7d1;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .btn-no {
+            background: #ff6b6b;
+            color: #fff;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-no:hover {
+            background: #ff5252;
+        }
+        
+        .crying-emoji {
+            font-size: 5em;
+            animation: cry 1s infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes cry {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .apology-text {
+            font-size: 1.2em;
+            color: #fff;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #fff;
+        }
+        
+        .success-message h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            animation: heartbeat 1s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .success-message p {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            color: rgba(255,255,255,0.7);
+            font-size: 2em;
+            animation: float-heart 4s linear infinite;
+        }
+        
+        @keyframes float-heart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .btn-no-text {
+            transition: all 0.3s ease;
+        }
+        
+        .game-area {
+            position: relative;
+            width: 400px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        
+        .sob-sound {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <div class="counter">
+            Percobaan Escape: <span id="escapeCount">0</span>
+        </div>
+        
+        <div class="crying-emoji">sayang</div>
+        <h1 class="title">Maafin Aku Ya?</h1>
+        
+        <div class="question">
+            Aku salah sayang, mau maafin aku ga? 
+            <br>Ya ya yaaa? 🙏
+        </div>
+        
+        <div class="game-area">
+            <div class="buttons-container">
+                <button class="btn btn-yes" onclick="acceptApology()">
+                    YA, AKU MAAFIN! ❤️
+                </button>
+                <button class="btn btn-no" id="noButton" onclick="rejectApology()">
+                    <span class="btn-no-text" id="noText">ENGGA MAU! 😤</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="apology-text">
+            <p>aku becanda doang sayangg</p>
+            <p>maaf yaa???❤️</p>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            <h2>YEAAAY! 🎉❤️</h2>
+            <p>Makasih udah maafin aku sayang!</p>
+            <p>Aku tau sih kamu pasti maafin aku</p>
+            <p>Cowo seganteng aku ga dimaafin ya rugii</p>
+        </div>
+    </div>
+    
+    <script>
+        let escapeCount = 0;
+        let isGameActive = true;
+        
+        const noTexts = [
+            "ENGGA MAU! 😤",
+            "GAK MAU AH! 😠",
+            "MALES! 🙄",
+            "OGAH! 😒",
+            "NOPE! 🚫",
+            "CAPE DEH! 😫",
+            "JANGAN! ✋",
+            "SKIP! ⏭️",
+            "BODO AMAT! 🤷‍♀️",
+            "UDAHAN! 😤",
+            "CAPEK NIH! 😴",
+            "PUSING! 🤯",
+            "BOSEN! 😑",
+            "KESEL! 😡",
+            "UDAH AH! 👋"
+        ];
+        
+        const apologyMessages = [
+            "Aku beneran minta maaf... 😔",
+            "Please jangan marah lagi... 🥺",
+            "Aku ga akan ngulangin lagi... 🙏",
+            "Pliss maaf sayangg... ❤️",
+            "Maafin donggg....",
+            "Aku butuh kamu... 🤗",
+            "Maafin aku sekali ini aja...",
+            "Aku janji ga gitu lagi...🤞"
+        ];
+        
+        function getRandomPosition() {
+            const gameArea = document.querySelector('.game-area');
+            const maxX = gameArea.offsetWidth - 200;
+            const maxY = gameArea.offsetHeight - 60;
+            
+            return {
+                x: Math.random() * maxX,
+                y: Math.random() * maxY
+            };
+        }
+        
+        function rejectApology() {
+            if (!isGameActive) return;
+            
+            escapeCount++;
+            document.getElementById('escapeCount').textContent = escapeCount;
+            
+            const noButton = document.getElementById('noButton');
+            const noText = document.getElementById('noText');
+            const position = getRandomPosition();
+            
+            // Change button text
+            noText.textContent = noTexts[Math.min(escapeCount - 1, noTexts.length - 1)];
+            
+            // Move button to random position
+            noButton.style.position = 'absolute';
+            noButton.style.left = position.x + 'px';
+            noButton.style.top = position.y + 'px';
+            
+            // Add shake effect to container
+            document.querySelector('.container').classList.add('shake');
+            setTimeout(() => {
+                document.querySelector('.container').classList.remove('shake');
+            }, 500);
+            
+            // Change apology text
+            const apologyText = document.querySelector('.apology-text');
+            apologyText.innerHTML = `<p>${apologyMessages[Math.floor(Math.random() * apologyMessages.length)]}</p>`;
+            
+            // Make button smaller and change color as it gets more desperate
+            if (escapeCount > 5) {
+                noButton.style.transform = `scale(${Math.max(0.5, 1 - escapeCount * 0.1)})`;
+                noButton.style.background = '#ff9999';
+            }
+            
+            // After many attempts, make the button really hard to click
+            if (escapeCount > 10) {
+                noButton.style.fontSize = '0.8em';
+                noButton.style.padding = '5px 10px';
+                noText.textContent = "CAPE! 😵";
+            }
+            
+            // Ultimate desperation mode
+            if (escapeCount > 15) {
+                noButton.style.opacity = '0.5';
+                noText.textContent = "NYERAH! 🏳️";
+                
+                // Start moving the button continuously
+                setInterval(() => {
+                    if (isGameActive) {
+                        const newPos = getRandomPosition();
+                        noButton.style.left = newPos.x + 'px';
+                        noButton.style.top = newPos.y + 'px';
+                    }
+                }, 1000);
+            }
+        }
+        
+        function acceptApology() {
+            if (!isGameActive) return;
+            
+            isGameActive = false;
+            
+            // Hide main content
+            document.querySelector('.title').style.display = 'none';
+            document.querySelector('.question').style.display = 'none';
+            document.querySelector('.buttons-container').style.display = 'none';
+            document.querySelector('.apology-text').style.display = 'none';
+            document.querySelector('.crying-emoji').style.display = 'none';
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Create heart rain effect
+            createHeartRain();
+            
+            // Change background to celebration colors
+            document.body.style.background = 'linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e)';
+        }
+        
+        function createHeartRain() {
+            const heartsContainer = document.getElementById('hearts');
+            const heartSymbols = ['❤️', '💕', '💖', '💗', '💘', '💝', '💞', '💟'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 5000);
+                }, i * 100);
+            }
+        }
+        
+        // Initial heart animation
+        function createFloatingHeart() {
+            const heartsContainer = document.getElementById('hearts');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💔';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            
+            heartsContainer.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+        
+        // Create floating broken hearts periodically
+        setInterval(createFloatingHeart, 2000);
+        
+        // Make the no button slightly move on hover to tease
+        document.getElementById('noButton').addEventListener('mouseenter', function() {
+            if (isGameActive && escapeCount < 3) {
+                this.style.transform = 'translateX(10px)';
+            }
+        });
+        
+        document.getElementById('noButton').addEventListener('mouseleave', function() {
+            if (isGameActive && escapeCount < 3) {
+                this.style.transform = 'translateX(0)';
+            }
+        });
+    </script>
+</body>
+</html>
